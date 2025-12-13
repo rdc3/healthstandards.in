@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run build:search-index && next build",
+    "build": "node scripts/copy-content-images.js && npm run build:search-index && next build",
     "build:search-index": "echo 'Skipping search index generation for now'",
     "start": "next start",
     "lint": "next lint",

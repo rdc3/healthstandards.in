@@ -49,12 +49,29 @@ export async function parseMarkdownContent(markdownContent: string): Promise<Par
  * Converts markdown to HTML using remark
  */
 async function convertMarkdownToHtml(markdown: string): Promise<string> {
+  // Process relative image paths to absolute paths
+  const processedMarkdown = processImagePaths(markdown);
+  
   const result = await remark()
     .use(remarkGfm) // GitHub Flavored Markdown support
     .use(remarkHtml, { sanitize: false }) // Allow HTML in markdown
-    .process(markdown);
+    .process(processedMarkdown);
   
   return result.toString();
+}
+
+/**
+ * Processes relative image paths in markdown to absolute paths
+ */
+function processImagePaths(markdown: string): string {
+  // Replace relative image paths (./image.png) with absolute paths (/image.png)
+  let processedMarkdown = markdown.replace(/!\[([^\]]*)\]\(\.\/([^)]+)\)/g, '![$1](/$2)');
+  
+  // Also handle paths that might already be relative without ./
+  // This ensures consistency for all image references
+  processedMarkdown = processedMarkdown.replace(/!\[([^\]]*)\]\(([^/][^)]+\.(png|jpg|jpeg|gif|svg|webp))\)/gi, '![$1](/$2)');
+  
+  return processedMarkdown;
 }
 
 /**

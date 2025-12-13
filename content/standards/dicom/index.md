@@ -28,7 +28,9 @@ The standard addresses:
 - **Query/Retrieve**: How to search for and retrieve images
 
 ## DICOM Architecture
+![DICOM Architecture Overview](/dicom.excalidraw.png)
 
+*DICOM architecture showing the layered structure from application services down to network transport*
 ### Information Object Definitions (IODs)
 
 DICOM defines various types of medical information as Information Objects:
@@ -135,7 +137,7 @@ Client (SCU) ←→ Server (SCP)
 
 *DICOM network communication flow between Service Class User (SCU) and Service Class Provider (SCP)*
 
-### C-STORE (Storage)
+### DIMSE | C-STORE (Storage)
 
 Stores DICOM objects on a remote system:
 
@@ -163,7 +165,7 @@ def store_dicom_image(image_path, destination_ae):
 
 *Example DICOM C-STORE operation for storing medical images*
 
-### C-FIND (Query)
+### DIMSE | C-FIND (Query)
 
 Searches for DICOM objects based on specified criteria:
 
@@ -190,7 +192,7 @@ def find_patient_studies(patient_id, query_ae):
 
 *Example DICOM C-FIND operation for querying patient studies*
 
-### C-MOVE (Retrieve)
+### DIMSE | C-MOVE (Retrieve)
 
 Retrieves DICOM objects from a remote system:
 

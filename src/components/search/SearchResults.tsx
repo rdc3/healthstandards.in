@@ -7,6 +7,8 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { SearchResult } from '../../utils/searchIndex';
 import { generateNoResultsSuggestions, suggestQueryCorrections } from '../../utils/searchValidation';
+import { createSafeNavigationHandler, isValidNavigationUrl } from '../../utils/navigationUtils';
+import { useNavigation } from '../../contexts/NavigationContext';
 
 interface SearchResultsProps {
   results: SearchResult[];
@@ -28,6 +30,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   className = ""
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [clickedResultId, setClickedResultId] = useState<string | null>(null);
+  const { navigationState } = useNavigation();
 
   // Calculate pagination
   const totalPages = Math.ceil(results.length / resultsPerPage);
@@ -39,6 +43,38 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   React.useEffect(() => {
     setCurrentPage(1);
   }, [results]);
+
+  // Create safe navigation handlers that prevent conflicts
+  const handleSuggestionClick = useMemo(() => 
+    createSafeNavigationHandler(
+      () => {}, // Navigation handled by Link component
+      (data) => onResultClick?.(data)
+    ), [onResultClick]
+  );
+
+  const handleCorrectionClick = useMemo(() => 
+    createSafeNavigationHandler(
+      () => {}, // Navigation handled by Link component
+      (data) => onResultClick?.(data)
+    ), [onResultClick]
+  );
+
+  const handleResultClick = useMemo(() => 
+    createSafeNavigationHandler(
+      () => {}, // Navigation handled by Link component
+      (data) => {
+        setClickedResultId(data.id);
+        onResultClick?.(data);
+      }
+    ), [onResultClick]
+  );
+
+  // Clear clicked result when navigation completes
+  React.useEffect(() => {
+    if (!navigationState.isNavigating) {
+      setClickedResultId(null);
+    }
+  }, [navigationState.isNavigating]);
 
   // Highlight search terms in text
   const highlightText = useMemo(() => {
@@ -58,10 +94,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
     };
   }, []);
 
-  // Handle result click
-  const handleResultClick = (result: SearchResult) => {
-    onResultClick?.(result);
-  };
+
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -164,23 +197,29 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
               <p className="text-sm font-medium text-blue-900 mb-2">Did you mean:</p>
               <div className="flex flex-wrap justify-center gap-2">
                 {corrections.map((correction) => (
-                  <button
+                  <Link
                     key={correction}
-                    onClick={() => onResultClick?.({ 
-                      id: 'correction', 
-                      title: correction, 
-                      excerpt: '', 
-                      url: `/search?q=${encodeURIComponent(correction)}`,
-                      relevanceScore: 1,
-                      highlightedText: [],
-                      standard: '',
-                      category: '',
-                      type: 'page'
-                    })}
+                    href={`/search?q=${encodeURIComponent(correction)}`}
+                    onClick={(e) => {
+                      const correctionUrl = `/search?q=${encodeURIComponent(correction)}`;
+                      if (isValidNavigationUrl(correctionUrl)) {
+                        handleCorrectionClick(e, correctionUrl, { 
+                          id: 'correction', 
+                          title: correction, 
+                          excerpt: '', 
+                          url: correctionUrl,
+                          relevanceScore: 1,
+                          highlightedText: [],
+                          standard: '',
+                          category: '',
+                          type: 'page'
+                        });
+                      }
+                    }}
                     className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
                   >
                     {correction}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -191,23 +230,29 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
             <p className="font-medium mb-3">Try searching for:</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-md mx-auto">
               {suggestions.map((suggestion) => (
-                <button
+                <Link
                   key={suggestion}
-                  onClick={() => onResultClick?.({ 
-                    id: 'suggestion', 
-                    title: suggestion, 
-                    excerpt: '', 
-                    url: `/search?q=${encodeURIComponent(suggestion)}`,
-                    relevanceScore: 1,
-                    highlightedText: [],
-                    standard: '',
-                    category: '',
-                    type: 'page'
-                  })}
-                  className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-left"
+                  href={`/search?q=${encodeURIComponent(suggestion)}`}
+                  onClick={(e) => {
+                    const suggestionUrl = `/search?q=${encodeURIComponent(suggestion)}`;
+                    if (isValidNavigationUrl(suggestionUrl)) {
+                      handleSuggestionClick(e, suggestionUrl, { 
+                        id: 'suggestion', 
+                        title: suggestion, 
+                        excerpt: '', 
+                        url: suggestionUrl,
+                        relevanceScore: 1,
+                        highlightedText: [],
+                        standard: '',
+                        category: '',
+                        type: 'page'
+                      });
+                    }
+                  }}
+                  className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-left block"
                 >
                   {suggestion}
-                </button>
+                </Link>
               ))}
             </div>
           </div>
@@ -252,11 +297,31 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
               <div className="flex-1">
                 <Link
                   href={result.url}
-                  onClick={() => handleResultClick(result)}
+                  onClick={(e) => {
+                    if (isValidNavigationUrl(result.url)) {
+                      handleResultClick(e, result.url, result);
+                    }
+                  }}
                   className="block group"
                 >
-                  <h3 className="text-lg font-medium text-blue-600 group-hover:text-blue-800 transition-colors">
+                  <h3 className="text-lg font-medium text-blue-600 group-hover:text-blue-800 transition-colors flex items-center">
                     {highlightText(result.title, query)}
+                    {clickedResultId === result.id && navigationState.isNavigating && (
+                      <svg
+                        className="animate-spin ml-2 h-4 w-4 text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                    )}
                   </h3>
                 </Link>
                 
@@ -305,7 +370,11 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
             <div className="mt-3 pt-3 border-t border-gray-100">
               <Link
                 href={result.url}
-                onClick={() => handleResultClick(result)}
+                onClick={(e) => {
+                  if (isValidNavigationUrl(result.url)) {
+                    handleResultClick(e, result.url, result);
+                  }
+                }}
                 className="text-sm text-green-600 hover:text-green-800 transition-colors"
               >
                 {window.location.origin}{result.url}

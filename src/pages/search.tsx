@@ -23,6 +23,9 @@ const SearchPage: React.FC = () => {
 
   // Initialize from URL parameters
   useEffect(() => {
+    // Only initialize if router is ready to prevent conflicts
+    if (!router.isReady) return;
+    
     if (typeof initialQuery === 'string') {
       setQuery(initialQuery);
     }
@@ -32,7 +35,7 @@ const SearchPage: React.FC = () => {
     if (typeof category === 'string') {
       setCategoryFilter(category);
     }
-  }, [initialQuery, standard, category]);
+  }, [initialQuery, standard, category, router.isReady]);
 
   // Perform search when query or filters change
   useEffect(() => {
@@ -42,34 +45,52 @@ const SearchPage: React.FC = () => {
         categoryFilter,
         limit: 20
       });
+    }
+  }, [query, standardFilter, categoryFilter, search]);
+
+  // Track search separately to avoid dependency issues
+  useEffect(() => {
+    if (query.trim() && searchResults.length >= 0) {
       trackSearch(query, searchResults.length);
     }
-  }, [query, standardFilter, categoryFilter, search, trackSearch, searchResults.length]);
+  }, [query, searchResults.length, trackSearch]);
 
-  // Update URL when search parameters change
-  useEffect(() => {
+  // Update URL when search parameters change (only when user explicitly searches)
+  const updateUrlParameters = useCallback((searchQuery: string, standard?: string, category?: string) => {
+    if (!router.isReady) return;
+    
     const params = new URLSearchParams();
-    if (query.trim()) params.set('q', query.trim());
-    if (standardFilter) params.set('standard', standardFilter);
-    if (categoryFilter) params.set('category', categoryFilter);
+    if (searchQuery.trim()) params.set('q', searchQuery.trim());
+    if (standard) params.set('standard', standard);
+    if (category) params.set('category', category);
     
     const newUrl = params.toString() ? `/search?${params.toString()}` : '/search';
     if (router.asPath !== newUrl) {
-      router.replace(newUrl, undefined, { shallow: true });
+      // Use shallow routing to prevent full page reload and maintain state
+      router.replace(newUrl, undefined, { shallow: true }).catch((err) => {
+        console.error('Failed to update URL parameters:', err);
+        // Don't throw - URL parameter updates should not break the app
+      });
     }
-  }, [query, standardFilter, categoryFilter, router]);
+  }, [router]);
 
   const handleSearch = useCallback((searchQuery: string) => {
     setQuery(searchQuery);
-  }, []);
+    // Update URL only when user explicitly searches
+    updateUrlParameters(searchQuery, standardFilter, categoryFilter);
+  }, [updateUrlParameters, standardFilter, categoryFilter]);
 
   const handleStandardFilterChange = useCallback((standard: string | undefined) => {
     setStandardFilter(standard);
-  }, []);
+    // Update URL when filter changes
+    updateUrlParameters(query, standard, categoryFilter);
+  }, [updateUrlParameters, query, categoryFilter]);
 
   const handleCategoryFilterChange = useCallback((category: string | undefined) => {
     setCategoryFilter(category);
-  }, []);
+    // Update URL when filter changes
+    updateUrlParameters(query, standardFilter, category);
+  }, [updateUrlParameters, query, standardFilter]);
 
   return (
     <>

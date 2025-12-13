@@ -37,10 +37,6 @@ const navigationItems: NavigationItem[] = [
     ],
   },
   {
-    name: 'Search',
-    href: '/search',
-  },
-  {
     name: 'Resources',
     href: '/resources',
   },

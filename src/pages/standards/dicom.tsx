@@ -23,7 +23,7 @@ export default function DicomPage({ content, frontmatter }: DicomPageProps) {
   return (
     <>
       <Head>
-        <title>{frontmatter.title} - Health Standards</title>
+        <title>{String(frontmatter.title)} - Health Standards</title>
         <meta name="description" content={frontmatter.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -49,7 +49,11 @@ export default function DicomPage({ content, frontmatter }: DicomPageProps) {
             </p>
             
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <span>Last updated: {new Date(frontmatter.lastUpdated).toLocaleDateString()}</span>
+              <span>Last updated: {new Date(frontmatter.lastUpdated).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}</span>
               <a 
                 href={frontmatter.officialSpec}
                 target="_blank"
