@@ -1,8 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/standards/hl7": "pages/standards/hl7.js",
-  "/standards/fhir": "pages/standards/fhir.js"
-}
+{"/_app":"pages/_app.js","/_error":"pages/_error.js","/about":"pages/about.html","/api/build-search-index":"pages/api/build-search-index.js","/":"pages/index.html","/resources":"pages/resources.html","/search":"pages/search.html","/standards":"pages/standards.html","/standards/dicom":"pages/standards/dicom.js","/standards/fhir":"pages/standards/fhir.js","/standards/hl7":"pages/standards/hl7.js","/_document":"pages/_document.js","/404":"pages/404.html"}

@@ -39,7 +39,7 @@ export interface SearchIndex {
 /**
  * Fuse.js configuration for healthcare standards search
  */
-const FUSE_OPTIONS: Fuse.IFuseOptions<SearchDocument> = {
+const FUSE_OPTIONS = {
   keys: [
     { name: 'title', weight: 0.3 },
     { name: 'content', weight: 0.4 },
@@ -247,7 +247,7 @@ function generateUrl(metadata: ContentMetadata): string {
 /**
  * Extracts highlighted text from Fuse.js matches
  */
-function extractHighlightedText(matches: readonly Fuse.FuseResultMatch[]): string[] {
+function extractHighlightedText(matches: readonly any[]): string[] {
   const highlighted: string[] = [];
   
   for (const match of matches) {

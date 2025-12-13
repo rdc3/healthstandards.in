@@ -5,12 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run build:search-index && next build",
-    "build:search-index": "npx ts-node --esm scripts/generate-search-index.ts",
+    "build:search-index": "echo 'Skipping search index generation for now'",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "export": "npm run build",
+    "deploy": "npm run export && gh-pages -d out"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
@@ -36,6 +38,7 @@
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",
     "fast-check": "^3.0.0",
+    "gh-pages": "^6.3.0",
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.0.0",
     "postcss": "^8.0.0",

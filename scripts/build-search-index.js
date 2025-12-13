@@ -8,8 +8,8 @@ async function main() {
   try {
     console.log('Starting search index generation...');
     
-    // Dynamic import of the TypeScript module
-    const { generateSearchIndex } = await import('../src/utils/buildSearchIndex.js');
+    // Dynamic import of the TypeScript module (Node.js will handle .ts files with ts-node)
+    const { generateSearchIndex } = await import('../src/utils/buildSearchIndex.ts');
     await generateSearchIndex();
     
     console.log('Search index generation completed successfully');
