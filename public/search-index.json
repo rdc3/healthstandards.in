@@ -1,0 +1,74 @@
+{
+  "documents": [
+    {
+      "id": "page-hl7",
+      "title": "HL7 Healthcare Standards Overview",
+      "content": "HL7 (Health Level Seven) International is a not-for-profit, ANSI-accredited standards developing organization dedicated to providing a comprehensive framework and related standards for the exchange, integration, sharing, and retrieval of electronic health information. HL7 refers to a set of international standards for transfer of clinical and administrative data between software applications used by various healthcare providers. These standards focus on the application layer, which is layer 7 in the OSI model. The organization produces standards that enable health information systems to communicate with each other. HL7 standards are used globally and are the foundation for interoperability in healthcare IT systems.",
+      "standard": "HL7",
+      "category": "messaging",
+      "url": "/standards/hl7",
+      "tags": ["interoperability", "messaging", "healthcare", "standards"],
+      "description": "Comprehensive overview of HL7 healthcare messaging standards for interoperability",
+      "type": "page"
+    },
+    {
+      "id": "page-fhir",
+      "title": "HL7 FHIR - Fast Healthcare Interoperability Resources",
+      "content": "FHIR (Fast Healthcare Interoperability Resources) is a standard for exchanging healthcare information electronically. Developed by HL7, FHIR combines the best features of HL7's previous standards while leveraging modern web technologies including RESTful APIs, JSON, and XML. FHIR represents a paradigm shift in healthcare interoperability by using web-based technologies, being resource-oriented with data organized into discrete resources, flexible supporting multiple implementation approaches, developer-friendly and easy to understand and implement, and mobile-ready designed for modern mobile and web applications.",
+      "standard": "FHIR",
+      "category": "messaging",
+      "url": "/standards/fhir",
+      "tags": ["fhir", "api", "rest", "interoperability", "json", "xml"],
+      "description": "Modern healthcare interoperability standard using RESTful APIs and web technologies",
+      "type": "page"
+    },
+    {
+      "id": "page-dicom",
+      "title": "DICOM - Digital Imaging and Communications in Medicine",
+      "content": "DICOM (Digital Imaging and Communications in Medicine) is the international standard for medical images and related information. It defines the formats for medical images that can be exchanged with the data and quality necessary for clinical use. DICOM enables the integration of medical imaging devices including scanners, servers, workstations, printers, network hardware, and picture archiving and communication systems (PACS) from multiple manufacturers. The standard addresses image format, network communication, media storage, print management, and query/retrieve operations.",
+      "standard": "DICOM",
+      "category": "imaging",
+      "url": "/standards/dicom",
+      "tags": ["medical-imaging", "radiology", "pacs", "dicom", "imaging"],
+      "description": "International standard for medical imaging and related information exchange",
+      "type": "page"
+    },
+    {
+      "id": "section-hl7-what-is-hl7",
+      "title": "HL7 Healthcare Standards Overview - What is HL7?",
+      "content": "HL7 refers to a set of international standards for transfer of clinical and administrative data between software applications used by various healthcare providers. These standards focus on the application layer, which is layer 7 in the OSI model. The organization produces standards that enable health information systems to communicate with each other. HL7 standards are used globally and are the foundation for interoperability in healthcare IT systems.",
+      "standard": "HL7",
+      "category": "messaging",
+      "url": "/standards/hl7#section-1",
+      "tags": ["interoperability", "messaging", "healthcare", "standards"],
+      "description": "Comprehensive overview of HL7 healthcare messaging standards for interoperability",
+      "section": "What is HL7?",
+      "type": "section"
+    },
+    {
+      "id": "section-fhir-core-concepts",
+      "title": "HL7 FHIR - Fast Healthcare Interoperability Resources - Core FHIR Concepts",
+      "content": "FHIR defines healthcare data as resources - discrete units of healthcare information. Common resources include Patient (demographics and administrative information), Observation (measurements, lab results, vital signs), Medication (drug information and prescriptions), Encounter (healthcare visits and episodes), and Practitioner (healthcare provider information). FHIR uses REST principles for data exchange with operations like GET, POST, PUT, DELETE.",
+      "standard": "FHIR",
+      "category": "messaging",
+      "url": "/standards/fhir#section-2",
+      "tags": ["fhir", "api", "rest", "interoperability", "json", "xml"],
+      "description": "Modern healthcare interoperability standard using RESTful APIs and web technologies",
+      "section": "Core FHIR Concepts",
+      "type": "section"
+    },
+    {
+      "id": "section-dicom-architecture",
+      "title": "DICOM - Digital Imaging and Communications in Medicine - DICOM Architecture",
+      "content": "DICOM defines various types of medical information as Information Objects including CT Image (Computed Tomography scans), MR Image (Magnetic Resonance images), US Image (Ultrasound images), X-Ray Image (Radiographic images), RT Structure Set (Radiation therapy structures), Patient (patient demographic information), Study (collection of imaging procedures), and Series (group of related images). DICOM defines services for different operations including Storage, Query/Retrieve, Print Management, Modality Worklist, and Structured Reporting.",
+      "standard": "DICOM",
+      "category": "imaging",
+      "url": "/standards/dicom#section-2",
+      "tags": ["medical-imaging", "radiology", "pacs", "dicom", "imaging"],
+      "description": "International standard for medical imaging and related information exchange",
+      "section": "DICOM Architecture",
+      "type": "section"
+    }
+  ],
+  "timestamp": "2024-12-13T11:30:00.000Z"
+}
