@@ -33,7 +33,13 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          # Try npm ci first, if it fails due to lock file issues, use npm install
+          if ! npm ci; then
+            echo "npm ci failed, falling back to npm install"
+            rm -f package-lock.json
+            npm install
+          fi
 
       - name: Build with Next.js
         run: npm run build
