@@ -12,7 +12,7 @@ description: "International standard for medical imaging and related information
 
 # DICOM - Digital Imaging and Communications in Medicine
 
-DICOM (Digital Imaging and Communications in Medicine) is the international standard for medical images and related information. It defines the formats for medical images that can be exchanged with the data and quality necessary for clinical use.
+**DICOM (Digital Imaging and Communications in Medicine)** is the international standard for medical images and related information. It defines the formats for medical images that can be exchanged with the data and quality necessary for clinical use.
 
 **Educational Purpose Notice**: This content is provided for educational and reference purposes only. For actual DICOM implementation in medical imaging systems, always consult the official DICOM standard documentation and work with certified DICOM specialists.
 
